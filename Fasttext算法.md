@@ -32,13 +32,13 @@ FastText主要有两个重要的优化：Hierarchical Softmax、N-gram。
 
 fastText模型架构和word2vec中的CBOW很相似， 不同之处是fastText预测标签而CBOW预测的是中间词，即模型架构类似但是模型的任务不同。CBOW的架构如下：
 
-![cbow](./word2vec.jpg)
+![cbow](/home/pythonlab/MechineLearningMaterial/fig/word2vec.jpg)
 
 word2vec将上下文关系转化为多分类任务，进而训练逻辑回归模型，这里的类别数量|V|词库大小。通常的文本数据中，词库少则数万，多则百万，在训练中直接训练多分类逻辑回归并不现实。word2vec中提供了两种针对大规模多分类问题的优化手段， **negative sampling 和hierarchical softmax**。在优化中，negative sampling 只更新少量负面类，从而减轻了计算量。hierarchical softmax 将词库表示成前缀树，从树根到叶子的路径可以表示为一系列二分类器，一次多分类计算的复杂度从|V|降低到了树的高度
 
 fastText模型架构：两层结构，一层隐藏层和输出层，其中$x_1,x_2,...,x_{n-1},x_n$表示一个文本中的n-gram向量，每个特征是词向量的平均值。这和前文中提到的cbow相似，cbow用上下文去预测中心词，而此处用全部的n-gram去预测指定类别。
 
-![fasttext](./fasttext.jpg)
+![fasttext](./fig/fasttext.jpg)
 
 
 
@@ -64,7 +64,7 @@ fastText模型架构：两层结构，一层隐藏层和输出层，其中$x_1,x
 
 对于文本句子的n-gram来说，如上面所说可以是字粒度或者是词粒度，**同时n-gram也可以在字符级别工作**（仅对英文而言），例如对单个单词matter来说，假设采用3-gram特征，那么matter可以表示成图中五个3-gram特征，这五个特征都有各自的词向量，五个特征的词向量和即为matter这个词的向其中“<”和“>”是作为边界符号被添加，来将一个单词的ngrams与单词本身区分开来：
 
-![charngram](./charngram.jpg)
+![charngram](./fig/charngram.jpg)
 
 举个例子。对于一个单词“google”，为了表达单词前后边界，我们加入<>两个字符，即变形为“<google>”。假设我们希望抽取所有的tri-gram信息，可以得到如下集合：G = { <go, goo, oog,ogl, gle, le>}。在实践中，我们往往会同时提取单词的多种n-gram信息，如2/3/4/5-gram。这样，原始的一个单词google，就被一个字符级别的n-gram集合所表达。
 
@@ -82,7 +82,7 @@ fastText模型架构：两层结构，一层隐藏层和输出层，其中$x_1,x
 
 （hash存储）由于n-gram的量远比word大的多，完全存下所有的n-gram也不现实。Fasttext采用了Hash桶的方式，把所有的n-gram都哈希到buckets个桶中，哈希到同一个桶的所有n-gram共享一个embedding vector。（CBOW的输入是目标单词的上下文并进行one-hot编码）
 
-![ngrams](./ngram.jpg)
+![ngrams](./fig/ngram.jpg)
 
 
 
@@ -90,7 +90,7 @@ fastText模型架构：两层结构，一层隐藏层和输出层，其中$x_1,x
 
 **输出层：**由于原始的softmax需要对所有的类别概率做归一化，在类目很大的情况下，在这类别很大情况下非常耗时，因此提出了分层softmax(Hierarchical Softmax),思想是根据类别的频率构造霍夫曼树来代替标准softmax，通过分层softmax可以将复杂度从N降低到logN。
 
-![层次softmax](./层次softmax.png)
+![层次softmax](./fig/层次softmax.png)
 
 层次softmax的思想实质上是将一个**全局多分类**的问题，转化成为了**若干个二元分类问题**，从而将计算复杂度从O(V)降到O(logV)。分成两个步骤：
 
@@ -98,11 +98,11 @@ fastText模型架构：两层结构，一层隐藏层和输出层，其中$x_1,x
 
 （2）二分类识别。每个二元分类问题，由一个基本的**逻辑回归**单元来实现。如下图所示，从根结点开始，每个中间结点（标记成灰色）都是一个逻辑回归单元，根据它的输出来选择下一步是向左走还是向右走。下图示例中实际上走了一条“左-左-右”的路线，从而找到单词w₂。而最终输出单词w₂的概率，等于中间若干逻辑回归单元输出概率的连乘积。
 
-![softmax树](./softmax树.jpg)
+![softmax树](./fig/softmax树.jpg)
 
 逻辑回归单元的公式：
 
-  ![逻辑回归](./softmax逻辑回归.jpg)
+  <img src="./fig/softmax树.jpg" alt="softmax树" style="zoom:80%;" />
 
 另外一种表示：
 
@@ -110,7 +110,7 @@ $p(w)= \prod_{i=1}^{L(w)-1} \delta(sign(w,j) \cdot \theta_{n(w,j)}^Th)$
 
  其中θn(w,j)是非叶子结点n(w,j)的向量表示（即输出向量）；h是隐藏层的输出值，从输入词的向量中计算得来；sign(x,j)是一个特殊函数定义
 
-![sign](./sign.png)
+![sign](./fig/sign.png)
 
 Hierarchical Softmax的另一个替代方法叫做Noise Contrastive Estimation(NCE) 负采样
 
@@ -135,7 +135,7 @@ Hierarchical Softmax的另一个替代方法叫做Noise Contrastive Estimation(N
 
 例子：
 
-![](./哈夫曼树.jpg)
+![](./fig/哈夫曼树.jpg)
 
 
 

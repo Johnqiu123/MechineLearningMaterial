@@ -12,3 +12,5 @@ https://jozeelin.github.io/2019/07/26/WMD/
 
 ## 面试问题
 
+1、问题：wmd距离中的权重如何计算？
+

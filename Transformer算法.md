@@ -22,13 +22,13 @@ Transomer 是完全基于注意力机制的支持并行化的Encoder-Decoder框�
 
 编码器将符号表示的输入序列（x1,..., xn）映射到连续表示序列z =（z1,....,zn）。 给定z，然后解码器一次一个元素地生成符号的输出序列（y1,...,ym）。 在每个步骤中，模型都是自回归的[10]，在生成下一个时使用先前生成的符号作为附加输入。
 
-![](./encoder-decoder架构.jpg)
+![](./fig/encoder-decoder架构.jpg)
 
 
 
 Transformer遵循这种整体架构，使用堆叠的**self-attention和point-wise**，完全连接的层用于**编码器和解码器（Transformer仍然属于encoder-decoder框架）**，分别如图1的左半部分和右半部分所示。
 
-![](./transformer.png)
+![](./fig/transformer.png)
 
 【位置编码层】
 
@@ -38,7 +38,7 @@ Transformer遵循这种整体架构，使用堆叠的**self-attention和point-wi
 
 注意力计算的三个阶段：**计算相关性，归一化，加权求和**。**第一个过程是根据Query和Key计算权重系数，第二个过程根据权重系数对Value进行加权求和。而第一个过程又可以细分为两个阶段：第一个阶段根据Query和Key计算两者的相似性或者相关性；第二个阶段对第一阶段的原始分值进行归一化处理**；如下图所示：
 
-![](./attention.jpg)
+![](./fig/attention.jpg)
 
 **加入缩放因子，构建Scaled Dot-Product Attention（缩放点乘注意力)**：
 
@@ -50,7 +50,7 @@ $Attention(Q,K,V)=softmax(\frac{QK^T}{\sqrt{d_k}})V$
 
 **多头注意力允许模型联合关注来自不同位置的不同表示子空间的信息。 平均会抑制只有一个注意力头的情况**。
 
-![](./多头attention.png)
+![](./fig/多头attention.png)
 
 **相当于将一个attention的计算，拆分成8份，然后并行计算，再将结果进行合并**
 
@@ -58,7 +58,7 @@ $Attention(Q,K,V)=softmax(\frac{QK^T}{\sqrt{d_k}})V$
 
 除了注意力子层之外，我们的**编码器和解码器**中的每个层都包含一个**完全连接的前馈网络**，该网络分别和相同地应用于每个位置。 这包括两个线性变换，其间有ReLU激活。
 
-![img](./ffn.png)
+![img](./fig/ffn.png)
 
 虽然线性变换在不同位置上是相同的，但它们在层与层之间使用不同的参数。 描述这种情况的另一种方式是两个内核大小为1的卷积。输入和输出的维度是dmodel = 512，内层的维度dff = 2048。
 
