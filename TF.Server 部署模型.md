@@ -14,18 +14,20 @@ https://www.jianshu.com/p/675a31e135c1
 
 https://cloud.tencent.com/developer/article/1435816
 
-## 算法是什么
+https://github.com/sthalles/deeplab_v3
+
+## 方案是什么
 
 
 
 
 
-## 算法是用来解决什么问题
+## 方案是用来解决什么问题
 
-## 算法在什么场景下使用，效果如何
+## 方案在什么场景下使用，效果如何
 
-## 算法的优缺点是什么
+## 方案的优缺点是什么
 
-## 算法的改进方案
+## 方案的改进方案
 
 ## 面试问题
