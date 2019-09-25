@@ -22,6 +22,8 @@ https://blog.csdn.net/littlely_ll/article/details/79252064
 
 https://www.baidu.com/link?url=TWV3VimobnvT6YT4UamWa3paKP4CYX5zrtzsDghpuOZ-ObTV46MOh0KhCovg1-Sl&wd=&eqid=ce30146600049820000000035d789f4f
 
+https://fasttext.cc/docs/en/supervised-tutorial.html  参数调优方案
+
 ## 算法是什么
 
 FastText是facebook开源的一个词向量与文本分类工具，在2016年开源，典型应用场景是“带监督的文本分类问题”。提供简单而高效的文本分类和表征学习的方法，性能比肩深度学习而且速度更快。
@@ -146,6 +148,23 @@ FastText是一个可以支持高效的词向量生成，以及做句子分类的
 
 
 ## 算法如何进行训练
+
+超参数训练：
+
+方案一：fasttext的自动调参。 
+
+```
+【python】
+model = fasttext.train_supervised(input='cooking.train', autotuneValidationFile='cooking.valid')
+【命令行】
+./fasttext supervised -input cooking.train -output model_cooking -autotune-validation cooking.valid
+```
+
+方案二：dim=100，lr=0.015，lr_update_rate=150, word_ngrams=3,  min_count=1,  epoch=50, t=5e-4,  bucket=2000000
+
+ 
+
+
 
 ## 算法在什么场景下使用，效果如何
 
